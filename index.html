@@ -596,11 +596,17 @@ window.addEventListener('DOMContentLoaded', () => {
         const groups = payload['cognito:groups'] || [];
 
         if (groups.includes('ME-DMZ_Internal_Team') || groups.includes('GOLDILOCKS_PROD_ACCESS')) {
-          document.cookie = `idToken=${jwt}; path=/; max-age=3600; Secure; SameSite=Strict`;
-          authContainer.style.display = 'none';
-          document.getElementById('reportContainer').style.display = 'block';
-          await initialize(jwt);
-        } else {
+  document.cookie = `idToken=${jwt}; path=/; max-age=3600; Secure; SameSite=Strict`;
+  
+  // Hide login + header + banner
+  authContainer.style.display = 'none';
+  document.querySelector('header').style.display = 'none';
+  document.querySelector('.banner').style.display = 'none';
+
+  // Show dashboard
+  document.getElementById('reportContainer').style.display = 'block';
+  await initialize(jwt);
+} else {
           setStatus('Awaiting Admin Approval. You cannot access the dashboard yet.', true);
           user.signOut();
         }
