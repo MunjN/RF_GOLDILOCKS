@@ -329,7 +329,7 @@ async function initialize(idToken) {
 
 
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -473,7 +473,192 @@ async function initialize(idToken) {
     </form>
 
     <p id="status"></p>
+  </div> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goldilocks Production Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/powerbi-client@2.19.1/dist/powerbi.min.js"></script>
+  <script src="/amazon-cognito-identity.min.js"></script>
+  <style>
+    body {
+      background-color: #1d186d;
+      color: white;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    header {
+      position: absolute;
+      top: 15px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    header img {
+      height: 50px;
+      cursor: pointer;
+    }
+    header p {
+      margin: 0;
+      font-size: 14px;
+      color: white;
+      font-weight: 500;
+    }
+    .login-container {
+      background: white;
+      color: #1d186d;
+      padding: 40px 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      width: 420px;
+      margin-top: 80px; /* leave space for header */
+    }
+    .tab-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 25px;
+      gap: 20px;
+    }
+    .tab-buttons button {
+      flex: 1;
+      padding: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background-color: #f1f1f1;
+      color: #000;
+      border-radius: 5px;
+      transition: all 0.2s ease-in-out;
+    }
+    .tab-buttons button.active {
+      background-color: #1d186d;
+      color: white;
+    }
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    input[type="email"], input[type="password"], input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button[type="submit"], button[type="button"] {
+      width: 100%;
+      padding: 10px;
+      background-color: #1d186d;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #222;
+    }
+    #status {
+      margin-top: 15px;
+      font-size: 14px;
+      text-align: center;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="https://me-dmz.com" target="_blank">
+      <img src="logo.png" alt="ME-DMZ Logo">
+    </a>
+    <p>Welcome to the ME-NEXUS Production Dashboard<br>
+       Brought to you by ME-DMZ</p>
+  </header>
+
+  <div id="reportContainer" style="width: 100vw; height: 100vh; border: 0; display: none;"></div>
+
+  <div class="login-container" id="authContainer">
+    <div class="tab-buttons">
+      <button id="loginTab" class="active">Sign In</button>
+      <button id="signupTab">Create Account</button>
+    </div>
+
+    <!-- Login -->
+    <form id="loginForm">
+      <h2>Sign In</h2>
+      <label for="email">Email</label>
+      <input type="email" id="email" required />
+      <label for="password">Password</label>
+      <input type="password" id="password" required />
+      <button type="submit">Sign In</button>
+      <p style="text-align: center; margin-top: 10px;">
+        <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+      </p>
+    </form>
+
+    <!-- Signup -->
+    <form id="signupForm" class="hidden">
+      <h2>Create Account</h2>
+      <label for="fullName">Full Name</label>
+      <input type="text" id="fullName" required />
+      <label for="newEmail">Email</label>
+      <input type="email" id="newEmail" required />
+      <label for="newPassword">Password</label>
+      <input type="password" id="newPassword" required />
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" required />
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <!-- Verify -->
+    <form id="verifyForm" class="hidden">
+      <h2>Enter Verification Code</h2>
+      <label for="code">Code from email</label>
+      <input type="text" id="code" required />
+      <button type="submit">Verify</button>
+      <p style="text-align: center; margin-top: 10px;">
+        <a href="#" id="resendCodeLink">Resend Code</a>
+      </p>
+    </form>
+
+    <!-- Forgot Password -->
+    <form id="forgotPasswordForm" class="hidden">
+      <h2>Reset Password</h2>
+      <label for="fpFullName">Full Name</label>
+      <input type="text" id="fpFullName" required />
+
+      <label for="fpEmail">Email</label>
+      <input type="email" id="fpEmail" required />
+      <button type="button" id="sendCodeBtn">Send Reset Code</button>
+
+      <br><br> <!-- Gap before verification code -->
+
+      <label for="fpCode">Verification Code</label>
+      <input type="text" id="fpCode" required />
+      <label for="fpNewPassword">New Password</label>
+      <input type="password" id="fpNewPassword" required />
+      <button type="submit">Confirm New Password</button>
+    </form>
+
+    <p id="status"></p>
   </div>
+
 
 <script>
 const loginTab = document.getElementById('loginTab');
